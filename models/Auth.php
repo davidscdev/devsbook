@@ -14,6 +14,14 @@ class Auth{
         //Verifica se a seção foi iniciada e se existe um token válido para esse usuário;.
         if (!empty($_SESSION['token'])) {
             $token = $_SESSION['token'];
+
+            $userDao = new UserDaoMysql($this->pdo);
+
+            $user = $userDao->findByToken($token);
+
+            if ($user) {
+                return $user;
+            }
         }
 
         //Caso não exista token válido, direciona o usuário para o login e finaliza a execução.
