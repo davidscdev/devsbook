@@ -83,3 +83,7 @@ form a {
     text-decoration:none;
     color:#4a76a8;
 }
+
+.msg_login {
+    color: red;
+}

@@ -8,7 +8,7 @@ require 'config.php';
     <meta charset="utf-8" />
     <title>Login</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/>
-    <link rel="stylesheet" href="<?=$base;?>assets/css/login.css" />
+    <link rel="stylesheet" href="<?=$base;?>/assets/css/login.css" />
 </head>
 <body>
     <header>
@@ -18,6 +18,14 @@ require 'config.php';
     </header>
     <section class="container main">
         <form method="POST" action="<?=$base;?>/login_action.php">
+
+        <?php if (!empty($_SESSION['msg'])):?>
+
+            <span class="msg_login"><?=$_SESSION['msg'];?></span>
+            
+            <?php $_SESSION['msg'] = '';?>
+        <?php endif;?>
+
             <input placeholder="Digite seu e-mail" class="input" type="email" name="email" />
 
             <input placeholder="Digite sua senha" class="input" type="password" name="password" />
