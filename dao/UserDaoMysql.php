@@ -92,5 +92,27 @@ class UserDaoMysql implements UserDAO {
 
         return true;
     }
+
+    public function insert(User $u){
+        $sql = $this->pdo->prepare("INSERT INTO users (name, email, password, birthdate, token) 
+                                                VALUES (:name, :email, :password, :birthdate, :token)"
+        );
+
+        $sql->bindValue(':name', $u->name);
+        $sql->bindValue(':email', $u->email);
+        $sql->bindValue(':password', $u->password);
+        $sql->bindValue(':birthdate', $u->birthdate);
+        $sql->bindValue(':token', $u->token);
+
+        if($sql->execute()){
+            return true;
+        }else{
+            echo("Erro ao adicionar novo registro: ");
+            print_r($sql->errorInfo());
+            exit;
+        }
+
+        return true;
+    }
     
 }
