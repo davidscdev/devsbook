@@ -15,6 +15,7 @@ class UserDaoMysql implements UserDAO {
         $u = new User();
         $u->id = $array['id'] ?? 0;
         $u->email = $array['email'] ?? '';
+        $u->password = $array['password'] ?? '';
         $u->name = $array['name'] ?? '';
         $u->birthdate = $array['birthdate'] ?? '';
         $u->city = $array['city'] ?? '';
@@ -73,7 +74,7 @@ class UserDaoMysql implements UserDAO {
         work = :work,
         avatar = :avatar,
         cover = :cover,
-        token = :token,
+        token = :token
         WHERE id =:id"
         );
 
@@ -88,9 +89,13 @@ class UserDaoMysql implements UserDAO {
         $sql->bindValue(':token', $u->token);
         $sql->bindValue(':id', $u->id);
 
-        $sql->execute();
-
-        return true;
+        if($sql->execute()){
+            return true;
+        }else{
+            echo("Erro ao atualizar o registro: ");
+            print_r($sql->errorInfo());
+            exit;
+        }
     }
 
     public function insert(User $u){

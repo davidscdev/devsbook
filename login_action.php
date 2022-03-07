@@ -6,9 +6,6 @@ $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
 $password = filter_input(INPUT_POST, 'password');
 
-
-//var_dump($email, $password);exit;
-
 if ($email && $password) {
     $auth = new Auth($pdo, $base);
 
