@@ -6,10 +6,13 @@ class Auth{
 
     private $pdo;
     private $base;
+    private $userPdo;
 
     public function __construct(PDO $pdo, $base){
         $this->pdo = $pdo;
         $this->base = $base;
+        //Inserido o PDO de Usuário pois o mesmo é necessário em todos os métodos.
+        $this->userPdo = new UserDaoMysql($this->pdo);
     }
 
     public function checkToken(){
@@ -17,9 +20,7 @@ class Auth{
         if (!empty($_SESSION['token'])) {
             $token = $_SESSION['token'];
 
-            $userDao = new UserDaoMysql($this->pdo);
-
-            $user = $userDao->findByToken($token);
+            $user = $this->userPdo->findByToken($token);
 
             if ($user) {
                 return $user;
@@ -33,9 +34,7 @@ class Auth{
     }
 
     public function validateLogin($email, $password){
-        $userDao = new UserDaoMysql($this->pdo);
-
-        $user = $userDao->findByEmail($email);
+        $user = $this->userPdo->findByEmail($email);
         if ($user) {
             if (password_verify($password, $user->password)) {
                 $token = md5(time().rand(0,9999));
@@ -43,7 +42,7 @@ class Auth{
                 $_SESSION['token'] = $token;
                 $user->token = $token;
 
-                $userDao->update($user);
+                $this->userPdo->update($user);
 
                 return true;
             }
@@ -53,13 +52,10 @@ class Auth{
     }
 
     public function emailExist($email){
-        $userDao = new UserDaoMysql($this->pdo);
-        return $userDao->findByEmail($email) ? true : false;
+        return $this->userPdo->findByEmail($email) ? true : false;
     }
 
     public function registerUser($name, $email, $password, $birthdate){
-        $userDao = new UserDaoMysql($this->pdo);
-
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $token = md5(time().rand(0,9999));
 
@@ -70,7 +66,7 @@ class Auth{
         $newUser->birthdate = $birthdate;
         $newUser->token = $token;
 
-        $userDao->insert($newUser);
+        $this->userPdo->insert($newUser);
 
         $_SESSION['token'] = $token;
     }
