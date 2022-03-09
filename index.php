@@ -6,6 +6,14 @@ $auth = new Auth($pdo, $base);
 $userInfo = $auth->checkToken();
 $activePage = 'home';
 
+
+// 1 - Lista os usuários que o usuário logado segue.
+
+// 2 - Pega os posts ordenados por data
+
+// 3 - Transforma o resultado em objetos para serem inseridos em bloco.
+
+
 require 'partials/header.php';
 require 'partials/menu.php';
 ?>
