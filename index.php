@@ -1,18 +1,20 @@
 <?php
 require 'config.php';
 require 'models/Auth.php';
+require 'dao/PostDaoMysql.php';
+
 
 $auth = new Auth($pdo, $base);
 $userInfo = $auth->checkToken();
 $activePage = 'home';
 
+$postList = new PostDaoMysql($pdo);
 
-// 1 - Lista os usuários que o usuário logado segue.
-
-// 2 - Pega os posts ordenados por data
-
-// 3 - Transforma o resultado em objetos para serem inseridos em bloco.
-
+$feed = $postList->getFeedHome($userInfo->id);
+echo '<pre>';
+var_dump($feed);
+echo '</pre>';
+exit;
 
 require 'partials/header.php';
 require 'partials/menu.php';
