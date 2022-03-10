@@ -80,7 +80,7 @@ class PostDaoMysql implements PostDAO {
             $newPost->liked = false;
 
             //Pega informações de COMENTÁRIOS
-            $newPost->coments = [];
+            $newPost->comments = [];
 
             $posts[] = $newPost;
 

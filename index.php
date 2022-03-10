@@ -11,10 +11,10 @@ $activePage = 'home';
 $postList = new PostDaoMysql($pdo);
 
 $feed = $postList->getFeedHome($userInfo->id);
-echo '<pre>';
+/* echo '<pre>';
 var_dump($feed);
 echo '</pre>';
-exit;
+exit; */
 
 require 'partials/header.php';
 require 'partials/menu.php';
@@ -24,7 +24,12 @@ require 'partials/menu.php';
             <div class="row">
                 <div class="column pr-5">
                     <?php require 'partials/feed-inserts.php';?>
+                    <?php foreach($feed as $item): ?>
+                        <?php require 'partials/feed-item.php';?>
+                    <?php endforeach; ?>
+
                 </div>
+
                 <div class="column side pl-5">
                     <div class="box banners">
                         <div class="box-header">
