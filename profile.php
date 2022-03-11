@@ -21,16 +21,23 @@ if (!$id) {
     $id = $userInfo->id;
 }
 
+
 $postData = new PostDaoMysql($pdo);
 $userData = new UserDaoMysql($pdo);
 
-
+// 1 - Pegar as infos do usuário 
 $user = $userData->findById($id);
 if(!$user){
     header('Location: '. $base);
 }
 
-// 1 - Pegar as infos do usuário 
+//Pega a idade do usuário
+$dateFrom = new Datetime($user->birthdate);
+$dateTo = new Datetime('today');
+
+$user->ages = $dateTo->diff($dateFrom)->y;
+
+
 
 // 2 - Pegar o feed desse usuário 
 
@@ -53,19 +60,21 @@ require 'partials/menu.php';
                     </div>
                     <div class="profile-info-name">
                         <div class="profile-info-name-text"><?=$user->name;?></div>
-                        <div class="profile-info-location"><?=$user->city;?></div>
+                        <?php if (!empty($user->city)): ?>
+                            <div class="profile-info-location"><?=$user->city;?></div>
+                        <?php endif;?>
                     </div>
                     <div class="profile-info-data row">
                         <div class="profile-info-item m-width-20">
-                            <div class="profile-info-item-n">129</div>
+                            <div class="profile-info-item-n">|TROCAR|</div>
                             <div class="profile-info-item-s">Seguidores</div>
                         </div>
                         <div class="profile-info-item m-width-20">
-                            <div class="profile-info-item-n">363</div>
+                            <div class="profile-info-item-n">|TROCAR|</div>
                             <div class="profile-info-item-s">Seguindo</div>
                         </div>
                         <div class="profile-info-item m-width-20">
-                            <div class="profile-info-item-n">12</div>
+                            <div class="profile-info-item-n">|TROCAR|</div>
                             <div class="profile-info-item-s">Fotos</div>
                         </div>
                     </div>
@@ -82,18 +91,23 @@ require 'partials/menu.php';
                 <div class="box-body">
                     
                     <div class="user-info-mini">
-                        <img src="assets/images/calendar.png" />
-                        01/01/1930 (90 anos)
+                        <img src="<?=$base;?>/assets/images/calendar.png" />
+                        <?=date('d/m/Y', strtotime($user->birthdate));?> (<?=$user->ages;?> anos)
                     </div>
 
                     <div class="user-info-mini">
-                        <img src="assets/images/pin.png" />
-                        Campina Grande, Brasil
+                        <img src="<?=$base?>/assets/images/pin.png" />
+                        <?php if (!empty($user->city)): ?>
+                            <?=$user->city;?>
+                        <?php endif;?>
+                        
                     </div>
 
                     <div class="user-info-mini">
-                        <img src="assets/images/work.png" />
-                        B7Web
+                        <img src="<?=$base?>/assets/images/work.png" />
+                        <?php if (!empty($user->work)): ?>
+                            <?=$user->work;?>
+                        <?php endif;?>
                     </div>
 
                 </div>
