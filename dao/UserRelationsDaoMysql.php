@@ -14,8 +14,11 @@ class UserRelationsDaoMysql implements UserRelationsDAO {
 
     }
 
-    public function getRelationsFromId($id){
-        $users = [$id];
+    /*
+    * Busca os perfis que o usuário segue 
+    */
+    public function getFollowing($id){
+        $users = [];
 
         $sql = $this->pdo->prepare('SELECT user_to FROM userrelations WHERE user_from = :user_from');
 
@@ -27,6 +30,29 @@ class UserRelationsDaoMysql implements UserRelationsDAO {
 
             foreach ($data as $value) {
                 $users[] = $value['user_to'];
+            }
+        }
+
+        return $users;
+
+    }
+
+    /*
+    * Busca os seguidores do usuário 
+    */
+    public function getFollower($id){
+        $users = [];
+
+        $sql = $this->pdo->prepare('SELECT user_from FROM userrelations WHERE user_to = :user_to');
+
+        $sql->bindValue(':user_to', $id);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $data = $sql->fetchAll();
+
+            foreach ($data as $value) {
+                $users[] = $value['user_from'];
             }
         }
 

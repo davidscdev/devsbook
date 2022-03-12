@@ -37,8 +37,10 @@ class PostDaoMysql implements PostDAO {
 
         // 1 - Lista os usuários que o usuário logado segue.
         $usRel = new UserRelationsDaoMysql($this->pdo);
-        $userList = $usRel-> getRelationsFromId($idUser);
-
+        $userList = $usRel-> getFollowing($idUser);
+        
+        //Adiciona o próprio usuário na lista para que ele possa ver os próprios posts.
+        $userList[] = $idUser;
         // 2 - Pega os posts ordenados por data
         $sql = $this->pdo->query("SELECT * FROM posts
         WHERE id_user IN (".implode(',',$userList).")

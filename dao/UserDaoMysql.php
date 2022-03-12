@@ -1,6 +1,7 @@
 <?php
 
 require_once 'models/User.php';
+require_once 'dao/UserRelationsDaoMysql.php';
 
 
 class UserDaoMysql implements UserDAO {
@@ -11,7 +12,7 @@ class UserDaoMysql implements UserDAO {
     }
 
 
-    private function generateUser($array){
+    private function generateUser($array, $full = false){
         $u = new User();
         $u->id = $array['id'] ?? 0;
         $u->email = $array['email'] ?? '';
@@ -24,6 +25,18 @@ class UserDaoMysql implements UserDAO {
         $u->cover = $array['cover'] ?? '';
         $u->token = $array['token'] ?? '';
 
+
+        if ($full) {
+            // quem o usuário segue
+            $userRel = new UserRelationsDaoMysql($this->pdo);
+            
+            $u->following = $userRel->getFollowing($u->id);
+       
+            // quem segue o usuário
+            $u->follower = $userRel->getFollower($u->id);
+
+            $u->photos = [];
+        }
         return $u;
     }
 
@@ -120,7 +133,12 @@ class UserDaoMysql implements UserDAO {
         return true;
     }
 
-    public function findById($id){
+    /*
+    * Função pra localizar o usuário pelo id.
+    * ---> Inserido o parâmetro $full pra que outras informações não contidas na 
+    *      tb_users possam ser retornadas.
+    */
+    public function findById($id, $full = false){
         if (!empty($id)) {
             $sql = $this->pdo->prepare("SELECT * FROM users WHERE id = :id;");
             $sql->bindValue(':id', $id);
@@ -129,7 +147,7 @@ class UserDaoMysql implements UserDAO {
             if ($sql->rowCount() > 0) {
                 $data = $sql->fetch(PDO::FETCH_ASSOC);
 
-                $user = $this->generateUser($data);
+                $user = $this->generateUser($data, $full);
 
                 return $user;
             }
