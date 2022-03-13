@@ -31,10 +31,19 @@ class UserDaoMysql implements UserDAO {
             $userRel = new UserRelationsDaoMysql($this->pdo);
             
             $u->following = $userRel->getFollowing($u->id);
+
+            //Transforma o id do seguidor nos dados completos
+            foreach ($u->following as $key => $following_id) {
+                $newUser = $this->findById($following_id);
+                $u->following[$key] = $newUser;
+            }
        
             // quem segue o usuário
             $u->follower = $userRel->getFollower($u->id);
-
+            foreach ($u->follower as $key => $follower_id) {
+                $newUser = $this->findById($follower_id);
+                $u->follower_id[$key] = $newUser;
+            }
             $u->photos = [];
         }
         return $u;
