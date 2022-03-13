@@ -32,6 +32,28 @@ class PostDaoMysql implements PostDAO {
         return true;
     }
 
+    public function getUserFeed($idUser){
+        $array = [];
+
+        // Pega os posts do usuário ordenados por data
+        $sql = $this->pdo->prepare("SELECT * FROM posts
+        WHERE id_user = :idUser
+        ORDER BY created_at DESC");
+
+        $sql->bindValue(":idUser", $idUser);
+
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+            
+            // 3 - Transforma o resultado em objetos para serem inseridos em bloco.
+            $array = $this->_postListToObject($data, $idUser);
+        }
+        
+        return $array;
+    }
+
     public function getFeedHome($idUser){
         $array = [];
 

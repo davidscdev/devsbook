@@ -11,5 +11,6 @@ class Post{
 
 interface PostDAO{
     public function insert(Post $p);
+    public function getUserFeed($idUser);
     public function getFeedHome($idUser);
 }
