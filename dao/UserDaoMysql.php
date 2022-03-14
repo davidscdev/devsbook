@@ -2,6 +2,7 @@
 
 require_once 'models/User.php';
 require_once 'dao/UserRelationsDaoMysql.php';
+require_once 'dao/PostDaoMysql.php';
 
 
 

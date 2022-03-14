@@ -1,7 +1,7 @@
 <?php
-require 'config.php';
-require 'models/Auth.php';
-require 'dao/PostDaoMysql.php';
+require_once 'config.php';
+require_once 'models/Auth.php';
+require_once 'dao/PostDaoMysql.php';
 
 
 
@@ -159,7 +159,7 @@ require 'partials/menu.php';
                         <span>(<?=count($user->photos);?>)</span>
                     </div>
                     <div class="box-header-buttons">
-                        <a href="">ver todos</a>
+                        <a href="<?=$base;?>/photos.php?id=<?=$friend->id;?>">ver todos</a>
                     </div>
                 </div>
                 <div class="box-body row m-20">
@@ -168,10 +168,10 @@ require 'partials/menu.php';
                             <?php foreach ($user->photos as $photo):?>
                                 <div class="user-photo-item">
                                     <a href="#modal-2" rel="modal:open">
-                                        <img src="media/uploads/1.jpg" />
+                                        <img src="<?=$base;?>/media/uploads/<?=$photo->body;?>" />
                                     </a>
                                     <div id="modal-2" style="display:none">
-                                        <img src="media/uploads/1.jpg" />
+                                        <img src="<?=$base;?>/media/uploads/<?=$photo->body;?>" />
                                     </div>
                                 </div>
                             <?php endforeach;?>
