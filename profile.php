@@ -20,6 +20,10 @@ $id = filter_input(INPUT_GET, 'id');
 
 $itsMe = true;
 
+if (!$id) {
+    $id = $userInfo->id;
+}
+
 if ($userInfo->id != $id) {
     $itsMe = false;
     if($activePage == 'profile'){
@@ -159,18 +163,18 @@ require 'partials/menu.php';
                         <span>(<?=count($user->photos);?>)</span>
                     </div>
                     <div class="box-header-buttons">
-                        <a href="<?=$base;?>/photos.php?id=<?=$friend->id;?>">ver todos</a>
+                        <a href="<?=$base;?>/photos.php?id=<?=$user->id;?>">ver todos</a>
                     </div>
                 </div>
                 <div class="box-body row m-20">
 
                     <?php if (count($user->photos)>0):?>
-                            <?php foreach ($user->photos as $photo):?>
+                            <?php foreach ($user->photos as $key => $photo):?>
                                 <div class="user-photo-item">
-                                    <a href="#modal-2" rel="modal:open">
+                                    <a href="#modal-<?=$key;?>" rel="modal:open">
                                         <img src="<?=$base;?>/media/uploads/<?=$photo->body;?>" />
                                     </a>
-                                    <div id="modal-2" style="display:none">
+                                    <div id="modal-<?=$key;?>" style="display:none">
                                         <img src="<?=$base;?>/media/uploads/<?=$photo->body;?>" />
                                     </div>
                                 </div>
