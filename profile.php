@@ -8,7 +8,8 @@ require_once 'dao/PostDaoMysql.php';
 $auth = new Auth($pdo, $base);
 $userInfo = $auth->checkToken();
 $activePage = 'profile';
-
+$user = [];
+$feed = [];
 
 /* $postList = new PostDaoMysql($pdo);
 $feed = $postList->getFeedHome($userInfo->id);
@@ -17,16 +18,13 @@ $feed = $postList->getFeedHome($userInfo->id);
  //Pega o id do usuário do perfil
 $id = filter_input(INPUT_GET, 'id');
 
-if (!$id) {
-    $id = $userInfo->id;
-}
-
-
 $itsMe = true;
 
 if ($userInfo->id != $id) {
     $itsMe = false;
-    $activePage = '';
+    if($activePage == 'profile'){
+        $activePage = '';
+    }
 }
 
 $postData = new PostDaoMysql($pdo);
@@ -37,6 +35,8 @@ $user = $userData->findById($id, true);
 if(!$user){
     header('Location: '. $base);
 }
+
+
 
 //Pega a idade do usuário
 $dateFrom = new Datetime($user->birthdate);

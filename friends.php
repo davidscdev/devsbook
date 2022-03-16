@@ -8,6 +8,8 @@ require_once 'dao/PostDaoMysql.php';
 $auth = new Auth($pdo, $base);
 $userInfo = $auth->checkToken();
 $activePage = 'friends';
+$user = [];
+$feed = [];
 
  //Pega o id do usuário do perfil
 $id = filter_input(INPUT_GET, 'id');
@@ -21,7 +23,9 @@ $itsMe = true;
 
 if ($userInfo->id != $id) {
     $itsMe = false;
-    $activePage = '';
+    if($activePage == 'profile'){
+        $activePage = '';
+    }
 }
 
 $postData = new PostDaoMysql($pdo);
@@ -29,6 +33,7 @@ $userData = new UserDaoMysql($pdo);
 
 // 1 - Pegar as infos do usuário 
 $user = $userData->findById($id, true);
+
 if(!$user){
     header('Location: '. $base);
 }
@@ -82,55 +87,53 @@ require 'partials/menu.php';
     </div>
 
     <div class="row">
+        <div class="column">
+            <div class="box">
+                <div class="box-body">
 
-    <div class="column">
-        <div class="box">
-            <div class="box-body">
-
-                <div class="tabs">
-                    <div class="tab-item" data-for="followers">
-                        Seguidores
-                    </div>
-                    <div class="tab-item active" data-for="following">
-                        Seguindo
-                    </div>
-                </div>
-                <div class="tab-content">
-                    <div class="tab-body" data-item="followers">
-                        <div class="full-friend-list">
-                            <?php foreach ($user->follower as $friend):?>
-                                <div class="friend-icon">
-                                        <a href="<?=$base;?>/profile.php?id=<?=$friend->id;?>">
-                                            <div class="friend-icon-avatar">
-                                                <img src="<?=$base?>/media/avatars/<?=$friend->avatar;?>" />
-                                            </div>
-                                            <div class="friend-icon-name">
-                                                <?=$friend->name;?>
-                                            </div>
-                                        </a>
-                                    </div>
-                            <?php endforeach;?>
-                        </div>    
-                    </div>
-                    
-                    <div class="tab-body" data-item="following">
-                        <div class="full-friend-list">
-                                <?php foreach ($user->following as $friend):?>
-                                    <div class="friend-icon">
-                                        <a href="<?=$base;?>/profile.php?id=<?=$friend->id;?>">
-                                            <div class="friend-icon-avatar">
-                                                <img src="<?=$base?>/media/avatars/<?=$friend->avatar;?>" />
-                                            </div>
-                                            <div class="friend-icon-name">
-                                                <?=$friend->name;?>
-                                            </div>
-                                        </a>
-                                    </div>
-                                <?php endforeach;?>
+                    <div class="tabs">
+                        <div class="tab-item" data-for="followers">
+                            Seguidores
+                        </div>
+                        <div class="tab-item active" data-for="following">
+                            Seguindo
                         </div>
                     </div>
-                </div>
-
+                    <div class="tab-content">
+                        <div class="tab-body" data-item="followers">
+                            <div class="full-friend-list">
+                                <?php foreach ($user->follower as $friend):?>
+                                    <div class="friend-icon">
+                                            <a href="<?=$base;?>/profile.php?id=<?=$friend->id;?>">
+                                                <div class="friend-icon-avatar">
+                                                    <img src="<?=$base?>/media/avatars/<?=$friend->avatar;?>" />
+                                                </div>
+                                                <div class="friend-icon-name">
+                                                    <?=$friend->name;?>
+                                                </div>
+                                            </a>
+                                        </div>
+                                <?php endforeach;?>
+                            </div>    
+                        </div>
+                        
+                        <div class="tab-body" data-item="following">
+                            <div class="full-friend-list">
+                                    <?php foreach ($user->following as $friend):?>
+                                        <div class="friend-icon">
+                                            <a href="<?=$base;?>/profile.php?id=<?=$friend->id;?>">
+                                                <div class="friend-icon-avatar">
+                                                    <img src="<?=$base?>/media/avatars/<?=$friend->avatar;?>" />
+                                                </div>
+                                                <div class="friend-icon-name">
+                                                    <?=$friend->name;?>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    <?php endforeach;?>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </div>
 
