@@ -7,8 +7,9 @@ require_once 'dao/UserDaoMysql.php';
 $auth = new Auth($pdo, $base);
 $userInfo = $auth->checkToken();
 $activePage = 'search';
+$users = [];
 
-$UserList = new UserDaoMysql($pdo);
+$userList = new UserDaoMysql($pdo);
 
 $searchTerm = filter_input(INPUT_GET, 's');
 
@@ -16,6 +17,8 @@ if (empty($searchTerm)) {
     header('Location: ./'); 
     exit;
 }
+
+$users = $userList->findByName($searchTerm);
 
 require 'partials/header.php';
 require 'partials/menu.php';
@@ -25,7 +28,21 @@ require 'partials/menu.php';
             <div class="row">
                 <div class="column pr-5">
                     <h3>Termo pesquisado: <?=$searchTerm;?></h3>
-                </div>
+                    <div class="full-friend-list">
+                        <?php foreach ($users as $friend):?>
+                            <div class="friend-icon">
+                                            <a href="<?=$base;?>/profile.php?id=<?=$friend->id;?>">
+                                                <div class="friend-icon-avatar">
+                                                    <img src="<?=$base?>/media/avatars/<?=$friend->avatar;?>" />
+                                                </div>
+                                                <div class="friend-icon-name">
+                                                    <?=$friend->name;?>
+                                                </div>
+                                            </a>
+                                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                  </div>
 
                 <div class="column side pl-5">
                     <div class="box banners">
@@ -42,7 +59,7 @@ require 'partials/menu.php';
                     </div>
                     <div class="box">
                         <div class="box-body m-10">
-                            Criado com 😎 por David Cavalcanti
+                            Criado por 😎 David Cavalcanti
                         </div>
                     </div>
                 </div>
