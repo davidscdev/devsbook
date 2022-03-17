@@ -20,10 +20,14 @@ require 'partials/menu.php';
                 <label>
                     Foto do Perfil:
                     <input type="file" name="avatar" id="">
+                    </br>
+                    <img src="<?=$base;?>/media/avatars/<?=$userInfo->avatar?>" class="mini" />
                 </label>
                 <label>
                     Capa:
                     <input type="file" name="cover" id="">
+                    </br>
+                    <img src="<?=$base;?>/media/covers/<?=$userInfo->cover?>" class="cover-mini" />
                 </label>
                 
                 <hr/>
@@ -31,27 +35,27 @@ require 'partials/menu.php';
                 <label>
                     Nome:
                     </br>
-                    <input type="text" name="name" id="">
+                    <input type="text" name="name" id="" value="<?=$userInfo->name;?>">
                 </label>
                 <label>
                     E-mail:
                     </br>
-                    <input type="email" name="email" id="">
+                    <input type="email" name="email" id="" value="<?=$userInfo->email;?>">
                 </label>
                 <label>
                     Data de Nascimento:
                     </br>
-                    <input type="date" name="birthdate" id="">
+                    <input type="date" name="birthdate" id="" value="<?=$userInfo->birthdate;?>">
                 </label>
                 <label>
                     Cidade:
                     </br>
-                    <input type="text" name="city" id="">
+                    <input type="text" name="city" id="" value="<?=$userInfo->city;?>">
                 </label>
                 <label>
                     Trabalho:
                     </br>
-                    <input type="text" name="work" id="">
+                    <input type="text" name="work" id="" value="<?=$userInfo->work;?>">
                 </label>
 
                 <hr/>

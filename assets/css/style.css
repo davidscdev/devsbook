@@ -408,6 +408,15 @@ margin-top: 10px;
     color:#142d4b;
 }
 
+.config-form .mini{
+    max-height: 100px;
+}
+
+.config-form .cover-mini{
+    max-height: 200px;
+}
+
+
 .button{
     border: 0;
     padding: 10px 20px; 
