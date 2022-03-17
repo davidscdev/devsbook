@@ -37,7 +37,7 @@ if ($name && $email && $password && $birthdate) {
 
     $auth->registerUser($name, $email, $password, $birthdate);
     header("Location: ".$base);
-    exit;        
+    exit;
 
 }
 

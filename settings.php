@@ -17,6 +17,12 @@ require 'partials/menu.php';
         <h1>Configurações do Usuário</h1>
         
             <form action="settings-action.php" method="post" class="config-form" enctype="multipart/form-data">
+                <?php if (!empty($_SESSION['msg'])):?>
+
+                    <span class="msg_login"><?=$_SESSION['msg'];?></span>
+
+                <?php $_SESSION['msg'] = '';?>
+                <?php endif;?>
                 <label>
                     Foto do Perfil:
                     <input type="file" name="avatar" id="">
@@ -45,7 +51,7 @@ require 'partials/menu.php';
                 <label>
                     Data de Nascimento:
                     </br>
-                    <input type="date" name="birthdate" id="" value="<?=$userInfo->birthdate;?>">
+                    <input type="text" name="birthdate" id="birthdate" value="<?=date('d/m/Y', strtotime($userInfo->birthdate));?>">
                 </label>
                 <label>
                     Cidade:
@@ -76,7 +82,18 @@ require 'partials/menu.php';
                 <?php print_r($userInfo);?>
             </pre> -->
     </section>
+    <script src="https://unpkg.com/imask"></script>
 
+    <script>
+        IMask(
+            document.getElementById('birthdate'),
+            {
+                mask: '00/00/0000',
+                min: new Date(1900, 0, 1),
+                max: new Date(2020, 0, 1),
+                lazy: true
+            });
+    </script>
 <?php
 require 'partials/footer.php';
 ?>
