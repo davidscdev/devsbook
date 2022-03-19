@@ -74,9 +74,6 @@ if ($name && $email) {
 }
 $userInfo->email = $email;
 
-echo '<pre>';
-var_dump($_FILES);
-
 /*************************************************
 *   Trata o envio do Avatar
 *************************************************/
@@ -128,6 +125,59 @@ if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] == 0 && !empty($_FILE
         $userInfo->avatar = $avatarName;
     }
 }
+
+/*************************************************
+*   Trata o envio do Capa
+*************************************************/
+//Testa se a capa foi enviado e se não contém erro no envio
+if (isset($_FILES['cover']) && $_FILES['cover']['error'] == 0 && !empty($_FILES['cover']['tmp_name'])) {
+    $newCover = $_FILES['cover'];
+    //Testa se o tipo de imagem enviado é um jpeg, jpg ou png
+    if (in_array($newCover['type'], ['image/jpeg','image/jpg','image/png'])) {
+        $widthCover = 850;
+        $heightCover = 310;
+
+        list($widthOrig, $heightOrig) = getimagesize($newCover['tmp_name']);
+        $ratio = $widthOrig / $heightOrig;
+
+        $newWidth = $widthCover;
+        $newHeight = $newWidth / $ratio;
+
+        if($newHeight < $heightCover){
+            $newHeight = $heightCover;
+            $newWidth = $newHeight * $ratio;
+        }
+
+        // Centraliza a imagem (horizontal e verticalmente)
+        $x = $widthCover - $newWidth;
+        $y = $heightCover - $newHeight;
+        $x = $x<0 ? $x/2 : $x;
+        $y = $y<0 ? $y/2 : $y;
+
+        $finalImage = imagecreatetruecolor($widthCover, $heightCover);
+        switch ($newCover['type']) {
+            case 'image/jpeg':
+            case 'image/jpg':
+                $image = imagecreatefromjpeg($newCover['tmp_name']);
+            break;
+            case 'image/png':
+                $image = imagecreatefrompng($newCover['tmp_name']);
+            break;
+        }
+
+        imagecopyresampled(
+            $finalImage, $image,
+            $x, $y, 0, 0,
+            $newWidth, $newHeight, $widthOrig, $heightOrig);
+
+        $coverName = md5(time().rand(0,999)).'.jpg';
+
+        imagejpeg($finalImage, './media/covers/'.$coverName, 100);
+
+        $userInfo->cover = $coverName;
+    }
+}
+
 $user->update($userInfo);
     
 
