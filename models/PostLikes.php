@@ -10,7 +10,7 @@ class PostLikes{
 
 interface PostLikesDAO {
     public function getLikeCount($idPost); //Conta a quantidade de likes do post.
-    public function isLiked($idPost, $idUSer); // Verifica se o usuário deu like no post
-    public function likeToggle($idPost, $idUSer); //Ativa ou desativa o like na publicação. 
+    public function isLiked($idPost, $idUser); // Verifica se o usuário deu like no post
+    public function likeToggle($idPost, $idUser); //Ativa ou desativa o like na publicação. 
 
 }

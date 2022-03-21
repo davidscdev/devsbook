@@ -36,7 +36,9 @@
             <?=nl2br($item->body);?>
         </div>
         <div class="feed-item-buttons row mt-20 m-width-20">
-            <div class="like-btn <?=$item->liked ? 'on' : '';?><?=$item->likeCount;?>on"><?=$item->likeCount;?></div>
+            <div class="like-btn <?=$item->liked ? 'on' : '';?> ">
+                <?=$item->likeCount;?>
+            </div>
             <div class="msg-btn"><?=count($item->comments);?></div>
         </div>
         <div class="feed-item-comments">

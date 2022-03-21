@@ -25,8 +25,23 @@ class PostLikeDaoMysql implements PostLikesDAO{
     } 
     
     // Verifica se o usuário deu like no post
-    public function isLiked($idPost, $idUSer){
+    public function isLiked($idPost, $idUser){
 
+        $sql = $this->pdo->prepare("SELECT * 
+        FROM postslikes
+        WHERE id_post = :idPost AND id_user = :idUser");
+
+        $sql->bindValue(':idPost', $idPost);
+        $sql->bindValue(':idUser', $idUser);
+        
+        $sql->execute();
+
+        if ($sql->rowCount()>0) {
+            return true;
+        }else{
+            return false;
+        }
+        
     }
 
    //Ativa ou desativa o like na publicação. 
