@@ -45,7 +45,21 @@ class PostLikeDaoMysql implements PostLikesDAO{
     }
 
    //Ativa ou desativa o like na publicação. 
-    public function likeToggle($idPost, $idUSer){
+    public function likeToggle($idPost, $idUser){
         
+        if ($this->isLiked($idPost, $idUser)) {
+            //DELETE
+            $sql = $this->pdo->prepare("DELETE  
+            FROM postslikes
+            WHERE id_post = :idPost AND id_user = :idUser");
+        }else{
+            //INSERT
+            $sql = $this->pdo->prepare("INSERT INTO  
+            postslikes (id_post, id_user, created_at) VALUES (:idPost, :idUser, now())");
+        }
+
+        $sql->bindValue(':idPost', $idPost);
+        $sql->bindValue(':idUser', $idUser);
+        $sql->execute();
     }
 }
