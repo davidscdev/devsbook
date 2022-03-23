@@ -3,6 +3,7 @@ require_once 'models/Post.php';
 require_once 'dao/UserRelationsDaoMysql.php';
 require_once 'dao/UserDaoMysql.php';
 require_once 'dao/PostLikeDaoMySql.php';
+require_once 'dao/PostComentsDaoMySql.php';
 
 class PostDaoMysql implements PostDAO {
     private $pdo;
@@ -109,6 +110,7 @@ class PostDaoMysql implements PostDAO {
         $posts = [];
         $userDao = new UserDaoMysql($this->pdo);
         $likesDao = new PostLikeDaoMySql($this->pdo);
+        $comentsDao = new PostComentsDaoMySql($this->pdo);
 
         foreach ($postList as $postItem) {
             $newPost = new Post();
@@ -131,7 +133,7 @@ class PostDaoMysql implements PostDAO {
             $newPost->liked = $likesDao->isLiked($newPost->id, $idUser);
             
             //Pega informações de COMENTÁRIOS
-            $newPost->comments = [];
+            $newPost->comments = $comentsDao->getComents($newPost->id);
 
             $posts[] = $newPost;
 
