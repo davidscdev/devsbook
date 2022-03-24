@@ -1,6 +1,7 @@
 <?php
 
 require_once 'models/PostComent.php';
+require_once 'dao/UserDaoMysql.php';
 
 class PostComentsDaoMySql implements PostComentsDAO{
 
@@ -12,9 +13,36 @@ class PostComentsDaoMySql implements PostComentsDAO{
     
 
     public function getComents($idPost){
-        $array = [];
+        $arrayResult = [];
 
-        return $array;
+        $sql = $this->pdo->prepare("SELECT * FROM postscoments
+        WHERE id_post = :idPost");
+
+        $sql->bindValue(':idPost', $idPost);
+        $sql->execute();
+
+        if($sql->rowCount()>0){
+
+            $userInfo = new UserDaoMysql($this->pdo);
+
+            $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($data as $coment) {
+                $comentItem = new PostComent();
+                $comentItem->id = $coment['id'];
+                $comentItem->idPost = $coment['id_post'];
+                $comentItem->idUser = $coment['id_user'];
+                $comentItem->body = $coment['body'];
+                $comentItem->createdAt = $coment['created_at'];
+                //Busca usuário para complementar as informações do sistema.
+                $comentItem->user = $userInfo->findById($coment['id_user']);
+
+                $arrayResult[] = $comentItem;
+
+            }
+        }
+
+        return $arrayResult;
     }
 
     public function addComents( PostComent $c){
