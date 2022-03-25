@@ -34,28 +34,36 @@ require_once 'feed-item-script.php';
                 <img src="<?=$base?>/assets/images/more.png" />
             </div>
         </div>
+
+
         <div class="feed-item-body mt-10 m-width-20">
             <?=nl2br($item->body);?>
         </div>
+
         <div class="feed-item-buttons row mt-20 m-width-20">
             <div class="like-btn <?=$item->liked ? 'on' : '';?> ">
                 <?=$item->likeCount;?>
             </div>
             <div class="msg-btn"><?=count($item->comments);?></div>
         </div>
+
+
         <div class="feed-item-comments"> 
-            <div class="fic-answer row m-height-10 m-width-20">
             
+            <div class="feed-item-comments-area">
                 <?php foreach ($item->comments as $comment):?>
-                    
-                    <div class="fic-item-photo">
-                    <a href="<?=$base;?>/profile.php?id=<?=$comment->user->id;?>"><img src="<?=$base;?>/media/avatars/<?=$comment->user->avatar;?>" /></a>
+         
+                    <div class="fic-answer row m-height-10 m-width-20">
+                        <div class="fic-item-photo">
+                            <a href="<?=$base;?>/profile.php?id=<?=$comment->user->id;?>"><img src="<?=$base;?>/media/avatars/<?=$comment->user->avatar;?>" /></a>
                         </div>
                         <div class="fic-item-info">
-                        <a href="<?=$base;?>/profile.php?id=<?=$comment->user->id;?>"><?=$comment->user->name;?></a>
-                        <?=$comment->body;?>
+                            <a href="<?=$base;?>/profile.php?id=<?=$comment->user->id;?>"><?=$comment->user->name;?></a>
+                            <?=$comment->body;?>
                         </div>
-
+                        
+                    </div>
+                    
                 <?php endforeach;?>
             </div>
 
@@ -67,5 +75,6 @@ require_once 'feed-item-script.php';
                 <input type="text" class="fic-item-field" placeholder="Escreva um comentário" />
             </div>
         </div>
+
     </div>
 </div>
