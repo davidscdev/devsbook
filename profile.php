@@ -2,6 +2,7 @@
 require_once 'config.php';
 require_once 'models/Auth.php';
 require_once 'dao/PostDaoMysql.php';
+require_once 'dao/UserRelationsDaoMysql.php';
 
 
 
@@ -33,6 +34,7 @@ if ($userInfo->id != $id) {
 
 $postData = new PostDaoMysql($pdo);
 $userData = new UserDaoMysql($pdo);
+$userRelationDao = new UserRelationsDaoMysql($pdo);
 
 // 1 - Pegar as infos do usuário 
 $user = $userData->findById($id, true);
@@ -53,7 +55,7 @@ $feed = $postData->getUserFeed($id);
 
 
 // 3 - Verificar se o usuário logado segue esse perfil
-
+$isFollowing = $userRelationDao->isFollowing($userInfo->id, $id);
 
 
 require 'partials/header.php';
@@ -76,6 +78,12 @@ require 'partials/menu.php';
                         <?php endif;?>
                     </div>
                     <div class="profile-info-data row">
+                        <?php if($id != $userInfo->id): ?>
+                            <div class="profile-info-item m-width-20">
+                                <a href="follow_action.php?id=<?=$id;?>" class="button"> <?= (!$isFollowing)?'Seguir':'Deixar de Seguir'; ?></a>
+                            </div>
+                        <?php endif; ?>
+
                         <div class="profile-info-item m-width-20">
                             <div class="profile-info-item-n"><?=count($user->follower);?></div>
                             <div class="profile-info-item-s">Seguidores</div>
