@@ -10,6 +10,10 @@
             </div>
             <div class="feed-new-input-placeholder">O que você está pensando, <?=$firtsName;?>?</div>
             <div class="feed-new-input" contenteditable="true"></div>
+            <div class="feed-new-photo">
+                <img src="<?=$base;?>/assets/images/photo.png" />
+                <input type="file" name="photo" class="feed-new-file" accept="image/png, image/jpeg">
+            </div>            
             <div class="feed-new-send">
                 <img src="<?=$base;?>/assets/images/send.png" />
             </div>
@@ -25,6 +29,34 @@
     let feedInput = document.querySelector('.feed-new-input');
     let feedSubmit = document.querySelector('.feed-new-send');
     let feedForm = document.querySelector('.feed-new-form');
+    let feedPhoto = document.querySelector('.feed-new-photo');
+    let feedFile = document.querySelector('.feed-new-file'); //Seleciona o input de arquivo que está escondido e o atrela ao click da img photo (selecionado acima).
+
+    /* Passa o evento de click da img photo para o input "excondido" em tela. */
+    feedPhoto.addEventListener('click', function(){
+        feedFile.click();
+    });
+
+    /*Cria o evento para envio da imagem no evento change do input file */
+    feedFile.addEventListener('change', async function(){
+        let photo = feedFile.files[0];
+        let formData = new FormData();
+
+        formData.append('photo', photo);
+
+        //Faz um envio do arquivo atráves de AJAX.
+        let req = await fetch('ajax_upload.php', {
+            method: 'POST',
+            body: formData
+        });
+        let json = await req.json();
+
+        if(json.error != '') {
+            alert(json.error);
+        }
+
+        window.location.href = window.location.href;
+    });
 
     /*No click da img enviar, pega o conteúdo da div feedinput coloca no form e envia o formulário. */
     feedSubmit.addEventListener('click', function(){

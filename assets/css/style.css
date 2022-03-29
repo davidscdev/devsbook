@@ -210,6 +210,7 @@ header .head-side {
 
 .feed-new-editor {
     align-items: center;
+    position: relative;
 }
 .feed-new-avatar {
     margin-right:10px;
@@ -232,13 +233,21 @@ header .head-side {
     display: none;
     color:#333;
 }
-.feed-new-send {
+.feed-new-send,
+.feed-new-photo {
     cursor: pointer;
     margin-right:5px;
 }
-.feed-new-send img {
+.feed-new-send img,
+.feed-new-photo img {
     width:25px;
     height:25px;
+}
+
+.feed-new-file {
+    position: absolute;
+    left: -500px;
+    top: -500px;
 }
 
 .banners .box-body {
